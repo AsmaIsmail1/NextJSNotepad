@@ -1,14 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
-import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import React, { useState, useRef } from 'react';
+import dynamic from 'next/dynamic';
 
 export default function NotesApp() {
   const [notes, setNotes] = useState([]);
   const [currentNote, setCurrentNote] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
+  const notesRef = useRef();
 
   const handleSaveNote = () => {
+    if (!currentNote.trim()) return;
+
     if (editingIndex !== null) {
       const updatedNotes = [...notes];
       updatedNotes[editingIndex] = currentNote;
@@ -42,19 +45,12 @@ export default function NotesApp() {
     setCurrentNote(formattedText);
   };
 
-  const PDFNotesDocument = () => (
-    <Document>
-      <Page style={pdfStyles.page}>
-        <View style={pdfStyles.section}>
-          {notes.map((note, index) => (
-            <Text key={index} style={{ marginBottom: 10 }}>
-              {note.replace(/<[^>]+>/g, '')}
-            </Text>
-          ))}
-        </View>
-      </Page>
-    </Document>
-  );
+  // const handleExportPDF = async () => {
+  //   const html2pdf = (await import('html2pdf.js')).default;
+  //   if (notesRef.current) {
+  //     html2pdf().from(notesRef.current).save('notes.pdf');
+  //   }
+  // };
 
   return (
     <div className="min-h-screen bg-gray-100 p-8">
@@ -98,7 +94,7 @@ export default function NotesApp() {
       </div>
 
       <h2 className="text-2xl font-semibold mb-2">Your Notes</h2>
-      <div className="space-y-4">
+      <div className="space-y-4" ref={notesRef}>
         {notes.map((note, index) => (
           <div
             key={index}
@@ -126,27 +122,16 @@ export default function NotesApp() {
         ))}
       </div>
 
-      {notes.length > 0 && (
+      {/* {notes.length > 0 && (
         <div className="mt-6">
-          <PDFDownloadLink
-            document={<PDFNotesDocument />}
-            fileName="notes.pdf"
+          <button
+            onClick={handleExportPDF}
             className="px-4 py-2 bg-teal-600 text-white rounded"
           >
-            {({ loading }) => (loading ? 'Preparing PDF...' : 'Export Notes to PDF')}
-          </PDFDownloadLink>
+            Export Notes to PDF
+          </button>
         </div>
-      )}
+      )} */}
     </div>
   );
 }
-
-const pdfStyles = StyleSheet.create({
-  page: {
-    padding: 30,
-    fontSize: 14,
-  },
-  section: {
-    marginBottom: 10,
-  },
-});
