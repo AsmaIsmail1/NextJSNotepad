@@ -1,4 +1,7 @@
 'use client';
+import './globals.css';
+
+import ThemeToggle from '../components/ThemeToggle'
 
 import React, { useState, useRef } from 'react';
 import dynamic from 'next/dynamic';
@@ -8,6 +11,7 @@ export default function NotesApp() {
   const [currentNote, setCurrentNote] = useState('');
   const [editingIndex, setEditingIndex] = useState(null);
   const notesRef = useRef();
+  const [darkMode, setDarkMode] = useState(false);
 
   const handleSaveNote = () => {
     if (!currentNote.trim()) return;
@@ -53,9 +57,18 @@ export default function NotesApp() {
   // };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
-      <h1 className="text-3xl font-bold mb-4 text-center">📝 Notes App</h1>
+    <>
+        <div className={darkMode ? 'dark' : ''}>
+      <div className="bg-gray-100 dark:bg-gray-900 text-black dark:text-white p-6 transition-colors duration-300">
+        <div className="flex justify-end mb-4">
+          <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
+        </div>
+        <h1 className="text-3xl font-bold mb-4 text-center">📝 Notes App</h1>
 
+      </div>
+    </div>
+
+    <div className=" p-8">
       <div className="mb-4">
         <textarea
           className="w-full h-40 p-2 border border-gray-300 rounded mb-2"
@@ -133,5 +146,6 @@ export default function NotesApp() {
         </div>
       )} */}
     </div>
+    </>
   );
 }
