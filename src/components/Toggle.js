@@ -17,7 +17,7 @@ export default function Toggle() {
     //   </div>
     // </div>
 
-    <div className="min-h-screen bg-white text-black dark:bg-black dark:text-white transition-colors duration-300">
+    <div className="min-h-screen text-black bg-black dark:text-white transition-colors duration-300">
   <div className="flex justify-end p-4">
     <ThemeToggle darkMode={darkMode} setDarkMode={setDarkMode} />
   </div>
